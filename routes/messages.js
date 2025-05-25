@@ -116,4 +116,31 @@ router.get('/:id', requireLogin, (req, res) => {
   });
 });
 
+// Afficher le formulaire de réponse
+router.get('/reply/:id', requireLogin, (req, res) => {
+  const receiverId = req.params.id;
+  const userId = req.session.userId;
+
+  // Récupérer le nom du destinataire pour affichage
+  const sql = 'SELECT name FROM users WHERE id = ?';
+
+  db.query(sql, [receiverId], (err, results) => {
+    if (err || results.length === 0) {
+      return res.render('error', { title: "Erreur", message: "Utilisateur introuvable." });
+    }
+
+    const receiverName = results[0].name;
+
+    res.render('send_message', {
+      session: req.session,
+      users: [], // on n'a pas besoin de la liste ici
+      title: "Répondre à un message",
+      error: null,
+      receiverId,
+      receiverName
+    });
+  });
+});
+
+
 module.exports = router;

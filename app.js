@@ -6,6 +6,7 @@ const engine = require('ejs-mate');
 const expressLayouts = require('express-ejs-layouts');
 
 const { requireLogin } = require('./middlewares/auth');
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
@@ -55,4 +56,4 @@ app.use((err, req, res, next) => {
 });
 
 // 🚀 Lancement du serveur
-app.listen(3000, () => console.log('✅ Serveur lancé sur http://localhost:3000'));
+app.listen(PORT, () => {console.log(`Serveur démarré sur le port ${PORT}`);});

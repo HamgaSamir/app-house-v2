@@ -4,6 +4,13 @@
   <h1>📨 Envoyer un message</h1>
 
   <form action="/messages/send" method="POST">
+      <% if (typeof receiverId !== 'undefined') { %>
+    <input type="hidden" name="receiver_id" value="<%= receiverId %>">
+    <div class="mb-3">
+      <label>À :</label>
+      <input type="text" class="form-control" value="<%= receiverName %>" disabled>
+    </div>
+  <% } else { %>
     <div class="mb-3">
       <label for="receiver" class="form-label">Destinataire :</label>
       <select class="form-select" name="receiver_id" required>
@@ -12,7 +19,7 @@
         <% }) %>
       </select>
     </div>
-
+<% } %>
     <div class="mb-3">
       <label for="content" class="form-label">Message :</label>
       <textarea class="form-control" name="content" rows="5" required></textarea>

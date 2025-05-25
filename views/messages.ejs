@@ -15,6 +15,9 @@
             
           </div>
           <a href="/messages/<%= msg.id %>" class="btn btn-sm btn-outline-primary">Voir</a>
+          <a href="/messages/reply/<%= msg.sender_id %>" class="btn btn-primary mt-3">
+  Répondre à <%= msg.sender_name %>
+</a>
         </li>
       <% }) %>
     </ul>
@@ -22,6 +25,7 @@
 
   <div class="mt-4">
     <a href="/messages/send" class="btn btn-success">✉️ Nouveau message</a>
+    
     <a href="/dashboard" class="btn btn-secondary">Retour</a>
   </div>
 </div>

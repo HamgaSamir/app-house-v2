@@ -12,6 +12,9 @@
   <p><%= message.content %></p>
 
   <div class="mt-4">
+    <a href="/messages/reply/<%= message.sender_id %>" class="btn btn-primary mt-3">
+  Répondre à <%= message.sender_name %>
+</a>
     <a href="/messages/" class="btn btn-secondary">⬅️ Retour</a>
   </div>
 </div>
