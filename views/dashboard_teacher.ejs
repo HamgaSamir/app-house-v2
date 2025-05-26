@@ -34,39 +34,48 @@
     </tr>
   </thead>
   <tbody>
-    <% slots.forEach(slot => { %>
-      <tr>
-       <tr>
-        <!-- 🗓️ Date -->
-        <td><%= new Date(slot.date).toLocaleDateString('fr-FR')%></td>
+  <% slots.forEach(slot => { %>
+    <tr>
+      <td><%= new Date(slot.date).toLocaleDateString('fr-FR') %></td>
+      <td><%= slot.time ? slot.time.slice(0, 5) : '—' %></td>
+      <td><%= slot.student_name || 'Non réservé' %></td>
 
-        <!-- ⏰ Heure (extrait HH:MM depuis HH:MM:SS) -->
-        <td><%= slot.time ? slot.time.slice(0, 5) : '—' %></td>
+      <td>
+        <% if (slot.available === 0 ){ %>
+          <span class="badge bg-success">Réservé</span>
+        <% } else { %>
+          <span class="badge bg-secondary">Libre</span>
+        <% } %>
+      </td>
 
-        <!-- 👤 Étudiant -->
-        <td><%= slot.student_name || 'Non réservé' %></td>
+      <td>
+        <% if (slot.status === 'accepted') { %>
+          ✔️ Acceptée
+        <% } else if (slot.status === 'rejected') { %>
+          ❌ Refusée
+        <% } else { %>
+          ⏳ En attente
+        <% } %>
+      </td>
 
-        <td>
-          <% if (slot.booking_id) { %>
-            <span class="badge bg-success">Réservé</span>
-          <% } else { %>
-            <span class="badge bg-secondary">Libre</span>
-          <% } %>
-        </td>
-        <td>
-          <% if (slot.booking_id) { %>
-            <!-- 🟡 Formulaire Rejet & Proposition -->
-            <form action="/reject-booking/<%= slot.booking_id %>" method="POST" class="d-flex gap-2 align-items-center">
-              <input type="datetime-local" name="proposed_date" class="form-control form-control-sm" required>
-              <button type="submit" class="btn btn-warning btn-sm">Rejeter & Proposer</button>
-            </form>
-          <% } else { %>
-            <span class="text-muted">Aucune action</span>
-          <% } %>
-        </td>
-      </tr>
-    <% }); %>
-  </tbody>
+      <td>
+        <% if (slot.available === 0 && slot.status === 'pending') { %>
+          <form method="POST" action="/accept-booking/<%= slot.id %>">
+            <button type="submit" class="btn btn-success btn-sm">Accepter</button>
+          </form>
+        <% } else if (slot.available === 1 && slot.status === 'accepted') { %>
+          <form action="/reject-booking/<%= slot.id %>" method="POST" class="d-flex gap-2 align-items-center">
+            <input type="datetime-local" name="proposed_date" class="form-control form-control-sm" required>
+            <button type="submit" class="btn btn-warning btn-sm">Rejeter & Proposer</button>
+          </form>
+        <% } else { %>
+          <span class="text-muted">Aucune action</span>
+        <% } %>
+      </td>
+    </tr>
+  <% }); %>
+</tbody>
+
 </table>
 
 

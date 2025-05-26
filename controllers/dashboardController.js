@@ -2,6 +2,7 @@ const db = require('../database'); // connexion MySQL
 
 exports.showDashboard = (req, res) => {
   const { role, userId, name, email } = req.session;
+    
 
   if (role === 'etudiant') {
     const querySlots = `

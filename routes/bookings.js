@@ -96,7 +96,10 @@ router.post('/book/:id', requireRole('etudiant'), (req, res) => {
       return res.render('error', { title: "Erreur", message: "Ce créneau est déjà réservé." });
     }
 
-    const insertSql = 'INSERT INTO bookings (student_id, slot_id) VALUES (?, ?)';
+    const insertSql = `
+  INSERT INTO bookings (student_id, slot_id)
+  VALUES (?, ? )
+`;
     db.query(insertSql, [studentId, slotId], (err2) => {
       if (err2) {
         console.error("Erreur insertion :", err2);
@@ -110,6 +113,22 @@ router.post('/book/:id', requireRole('etudiant'), (req, res) => {
     });
   });
 });
+
+router.post('/accept-booking/:id', requireRole('enseignant'), (req, res) => {
+  const bookingId = req.params.id;
+
+  const sql = `UPDATE slots SET status = 'accepted' WHERE id = ?`;
+
+  db.query(sql, [bookingId], (err) => {
+    if (err) {
+      console.error("Erreur d'acceptation :", err);
+      return res.render('error', { message: "Erreur de confirmation", title: "Erreur" });
+    }
+
+    res.redirect('/dashboard');
+  });
+});
+
 
 // Enseignant : Rejeter avec proposition d’un autre créneau
 router.post('/reject-booking/:id/with-proposal', requireRole('enseignant'), (req, res) => {
